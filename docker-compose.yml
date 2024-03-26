@@ -1,0 +1,23 @@
+version: "3"
+services:
+  redis:
+    container_name: redis
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+      
+  server:
+    container_name: app
+    image: phishtank/app
+    build: .
+#    volumes:
+#      - ./app:/code/app
+    ports:
+        - "8000:8000"
+    depends_on:
+        - redis
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      PHISHTANK_URL: "https://data.phishtank.com/data/online-valid.csv"
